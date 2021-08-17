@@ -11,4 +11,8 @@ public class LoginViewModel extends AndroidViewModel {
         super(application);
     }
 
+    public void login(String email, String password){
+
+    }
+
 }

@@ -14,7 +14,7 @@ public interface PersonService {
     Call<PersonModel> create( @Field("name") String name,
                               @Field("email") String email,
                               @Field("password") String password,
-                              @Field("receivenews") String receivenews );
+                              @Field("receivenews") Boolean receivenews );
 
     @FormUrlEncoded
     @POST("Authentication/Login")

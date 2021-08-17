@@ -46,7 +46,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.button_create){
-            
+
+            String name = this.mViewHolder.editName.getText().toString();
+            String email = this.mViewHolder.editEmail.getText().toString();
+            String password = this.mViewHolder.editPassword.getText().toString();
+
+            this.mRegisterViewModel.create(name, email, password);
+
         }
     }
 
