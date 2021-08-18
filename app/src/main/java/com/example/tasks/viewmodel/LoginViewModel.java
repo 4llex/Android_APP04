@@ -29,6 +29,9 @@ public class LoginViewModel extends AndroidViewModel {
             @Override
 
             public void onSuccess(PersonModel result) {
+                // salva dados do user no sharedPreferences
+                mPersonRepository.saveUserData(result);
+                // Informa sucesso
                 mLogin.setValue(new Feedback());
             }
 
