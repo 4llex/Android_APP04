@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -16,9 +18,10 @@ import com.example.tasks.R;
 import com.example.tasks.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
-public class TaskActivity extends AppCompatActivity implements View.OnClickListener {
+public class TaskActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     private SimpleDateFormat mFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private ViewHolder mViewHolder = new ViewHolder();
@@ -50,10 +53,20 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(year, month, dayOfMonth);
+
+        String date = this.mFormat.format(c.getTime());
+        this.mViewHolder.buttonDate.setText(date);
+    }
+
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.button_date) {
-
+            this.showDatePicker();
         } else if (id == R.id.button_save) {
 
         }
@@ -67,6 +80,15 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
+    private void showDatePicker() {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        new DatePickerDialog(this, this, year, month, day).show();
+    }
+
     private void createEvents() {
         this.mViewHolder.buttonSave.setOnClickListener(this);
         this.mViewHolder.buttonDate.setOnClickListener(this);
@@ -77,7 +99,6 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void loadObservers() {
     }
-
 
 
     /**
