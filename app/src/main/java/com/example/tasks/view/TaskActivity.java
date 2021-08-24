@@ -2,12 +2,14 @@ package com.example.tasks.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -15,10 +17,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.tasks.R;
+import com.example.tasks.service.model.PriorityModel;
 import com.example.tasks.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class TaskActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
@@ -50,6 +55,8 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
 
         // Cria observadores
         this.loadObservers();
+        this.mViewModel.getList();
+
     }
 
     @Override
@@ -98,8 +105,23 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
      * Observadores
      */
     private void loadObservers() {
+        this.mViewModel.listPriority.observe(this, new Observer<List<PriorityModel>>() {
+            @Override
+            public void onChanged(List<PriorityModel> list) {
+                loadSpinner(list);
+            }
+        });
     }
 
+    public void loadSpinner(List<PriorityModel> list){
+        List<String> lstPriority = new ArrayList<>();
+        for (PriorityModel p : list){
+            lstPriority.add(p.getDescription());
+        }
+
+        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, lstPriority);
+        this.mViewHolder.spinnerPriority.setAdapter(adapter);
+    }
 
     /**
      * ViewHolder
