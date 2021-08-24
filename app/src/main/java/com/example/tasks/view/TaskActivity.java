@@ -18,6 +18,7 @@ import android.widget.Spinner;
 
 import com.example.tasks.R;
 import com.example.tasks.service.model.PriorityModel;
+import com.example.tasks.service.model.TaskModel;
 import com.example.tasks.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
@@ -31,6 +32,7 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
     private SimpleDateFormat mFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private ViewHolder mViewHolder = new ViewHolder();
     private TaskViewModel mViewModel;
+    private List<Integer> mListPriority = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +77,10 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.button_date) {
             this.showDatePicker();
         } else if (id == R.id.button_save) {
-
+            this.handleSave();
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -85,6 +88,16 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void handleSave() {
+        TaskModel task = new TaskModel();
+
+        task.setDescription(this.mViewHolder.editDescription.getText().toString());
+        task.setComplete(this.mViewHolder.checkComplete.isChecked());
+        task.setDueData(this.mViewHolder.buttonDate.getText().toString());
+        task.setPriorityId(this.mListPriority.get(this.mViewHolder.spinnerPriority.getSelectedItemPosition()));
     }
 
     private void showDatePicker() {
@@ -117,6 +130,7 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
         List<String> lstPriority = new ArrayList<>();
         for (PriorityModel p : list){
             lstPriority.add(p.getDescription());
+            this.mListPriority.add(p.getId());
         }
 
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, lstPriority);
