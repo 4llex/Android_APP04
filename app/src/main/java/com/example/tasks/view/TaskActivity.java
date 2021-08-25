@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.tasks.R;
+import com.example.tasks.service.listener.Feedback;
 import com.example.tasks.service.model.PriorityModel;
 import com.example.tasks.service.model.TaskModel;
 import com.example.tasks.viewmodel.TaskViewModel;
@@ -98,6 +99,8 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
         task.setComplete(this.mViewHolder.checkComplete.isChecked());
         task.setDueData(this.mViewHolder.buttonDate.getText().toString());
         task.setPriorityId(this.mListPriority.get(this.mViewHolder.spinnerPriority.getSelectedItemPosition()));
+
+        this.mViewModel.save(task);
     }
 
     private void showDatePicker() {
@@ -122,6 +125,13 @@ public class TaskActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onChanged(List<PriorityModel> list) {
                 loadSpinner(list);
+            }
+        });
+
+        this.mViewModel.taskSave.observe(this, new Observer<Feedback>() {
+            @Override
+            public void onChanged(Feedback feedback) {
+                String s = "";
             }
         });
     }
